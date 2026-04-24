@@ -34,10 +34,14 @@ No arguments required. Everything is derived from the current git branch.
    If no failed runs exist, tell the user and stop.
 
 4. Run `artifactsdownloader` to download the artifacts:
+
+   Create a directory named `logs_{run_id}`, move in there and run:
+
    ```bash
    artifactsdownloader {owner} {repo} {run_id}
    ```
-   This creates a `logs/` directory with test output files and log dumps.
+   This will download test output files and log dumps.
+   
 
    If `artifactsdownloader` is not installed, tell the user to install it:
    ```
@@ -45,9 +49,9 @@ No arguments required. Everything is derived from the current git branch.
    ```
    Also remind them to set `GITHUB_TOKEN` if not already set.
 
-5. Locate the test output files and log dump directories in the downloaded `logs/` directory:
-   - Test output files: `logs/logs/*e2etests*.txt` or similar patterns
-   - Log dump directories: `logs/kind-logs-*/` directories
+5. Locate the test output files and log dump directories in the downloaded `logs_{runid}/` directory:
+   - Test output files: `logs_{runid}/logs/*e2etests*.txt` or similar patterns
+   - Log dump directories: `logs_{runid}/kind-logs-*/` directories
 
    For each test output file, pair it with the corresponding log dump directory (match by name, e.g., `4_e2etests (operator).txt` pairs with `kind-logs-operator/`).
 
