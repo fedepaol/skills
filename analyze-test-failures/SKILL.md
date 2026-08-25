@@ -15,45 +15,22 @@ No arguments required. Everything is derived from the current git branch.
 
 ## Step 0: Download CI Artifacts
 
-1. Determine the current branch and repo:
-   ```bash
-   BRANCH=$(git rev-parse --abbrev-ref HEAD)
-   ```
-   Use `gh repo view --json owner,name` to get owner and repo.
+Run the bundled `fetch-logs.sh` script located next to this SKILL.md file. Find the skill directory and run:
 
-2. Find the PR for this branch:
-   ```bash
-   gh pr view "$BRANCH" --json number,headRefOid -q '.number'
-   ```
-   If no PR exists for this branch, tell the user and stop.
+```bash
+bash <skill-directory>/fetch-logs.sh
+```
 
-3. Find the last failed workflow run for this PR:
-   ```bash
-   gh api "repos/{owner}/{repo}/actions/runs?branch=$BRANCH&status=failure&per_page=1" --jq '.workflow_runs[0].id'
-   ```
-   If no failed runs exist, tell the user and stop.
+The script outputs JSON with:
+- `run_id`: CI run ID
+- `logs_dir`: absolute path to downloaded logs
+- `test_outputs`: array of test output file paths
+- `log_dumps`: array of log dump directory paths
+- `branch`, `pr`, `owner`, `repo`: metadata
 
-4. Run `artifactsdownloader` to download the artifacts:
+If the script exits with error, parse the `{"error": "..."}` message and report to user.
 
-   Create a directory named `logs_{run_id}`, move in there and run:
-
-   ```bash
-   artifactsdownloader {owner} {repo} {run_id}
-   ```
-   This will download test output files and log dumps.
-   
-
-   If `artifactsdownloader` is not installed, tell the user to install it:
-   ```
-   go install github.com/fedepaol/artifactsdownloader@latest
-   ```
-   Also remind them to set `GITHUB_TOKEN` if not already set.
-
-5. Locate the test output files and log dump directories in the downloaded `logs_{runid}/` directory:
-   - Test output files: `logs_{runid}/logs/*e2etests*.txt` or similar patterns
-   - Log dump directories: `logs_{runid}/kind-logs-*/` directories
-
-   For each test output file, pair it with the corresponding log dump directory (match by name, e.g., `4_e2etests (operator).txt` pairs with `kind-logs-operator/`).
+For each test output file, pair it with the corresponding log dump directory (match by name, e.g., `4_e2etests (operator).txt` pairs with `kind-logs-operator/`).
 
 ## Step 1: Identify Failed Tests
 
