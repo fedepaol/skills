@@ -1,0 +1,2 @@
+description: Review code changes for correctness, regressions, security, and maintainability. Use after implementation or when reviewing a diff.
+model: XXX
