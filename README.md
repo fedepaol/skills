@@ -21,15 +21,17 @@ again.
 ## Personas
 
 Create one directory per persona in `personas/`. Add shared instructions in
-`instructions.md` and target-specific frontmatter in `claude.yaml`,
-`codex.yaml`, and `opencode.yaml`. Run `./deploy.sh` to install it at:
+`instructions.md` and target-specific metadata in `claude.yaml`,
+`codex.yaml`, and `opencode.yaml`. The deploy script combines the shared
+instructions with each platform's metadata and renders Codex TOML files. Run
+`./deploy.sh` to install them at:
 
 - Claude: `~/.claude/agents/<name>.md`; invoke with `@<name>`.
-- Codex: `$CODEX_HOME/agents/<name>.md` (or `~/.codex/agents/`); use as an
-  `agent_type` for an isolated subagent.
+- Codex: `$CODEX_HOME/agents/<name>.toml` (or `~/.codex/agents/`); ask
+  Codex to delegate a task to the named agent.
 - OpenCode: `~/.config/opencode/agents/<name>.md`; select it as a primary
   agent or invoke it as configured by OpenCode.
 
 `architect` ships as a Kubernetes, networking, and Go architecture persona.
-Its Codex model is `gpt-5.6-sol`; replace `XXX` in its Claude and OpenCode
-metadata with the desired model before deployment.
+Its Codex model is `gpt-5.6-sol`. Claude Code and OpenCode inherit the selected
+model; set a platform-specific model in its metadata when needed.

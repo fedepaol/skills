@@ -50,7 +50,8 @@ deploy_personas() {
 }
 
 deploy_personas claude "$CLAUDE_PERSONAS_DIR"
-deploy_personas codex "$CODEX_PERSONAS_DIR"
+echo "Deploying Codex agents to $CODEX_PERSONAS_DIR"
+python3 "$SCRIPT_DIR/agents/render_codex.py" "$PERSONAS_SOURCE_DIR" "$CODEX_PERSONAS_DIR"
 deploy_personas opencode "$OPENCODE_PERSONAS_DIR"
 
 for instructions_target in "$CLAUDE_INSTRUCTIONS" "$CODEX_INSTRUCTIONS" "$OPENCODE_INSTRUCTIONS"; do
